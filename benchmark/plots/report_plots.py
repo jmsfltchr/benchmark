@@ -38,7 +38,7 @@ def reformat_iterations_in_overviews(overviews):
 
 
 def get_json_url(commit_sha, analysis_id):
-    return f"https://grabl.io/api/data/jmsfltchr/simulation/{commit_sha}/analysis/performance-analysis?q=%7B%22id%22%3A%7B%22selected%22%3A%22{analysis_id}%22%7D,%22trace%22%3A%7B%22path%22%3A%5B%7B%22optional%22%3Atrue%7D%5D,%22tracker%22%3A%7B%22optional%22%3Atrue%7D,%22labels%22%3A%7B%22names%22%3A%5B%5D%7D,%22iteration%22%3A%7B%7D%7D%7D"
+    return f"https://grabl.io/api/data/jmsfltchr/simulation/{commit_sha}/analysis/performance-analysis?q={{%22analysis%22:{{%22id%22:{{%22selected%22:%22{analysis_id}%22}},%22trace%22:{{%22path%22:[{{%22optional%22:true}}],%22tracker%22:{{%22optional%22:true}},%22labels%22:{{%22names%22:[]}},%22iteration%22:{{}}}}}}}}"
 
 
 if __name__ == "__main__":
