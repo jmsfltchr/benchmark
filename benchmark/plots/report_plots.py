@@ -42,31 +42,35 @@ def get_json_url(commit_sha, analysis_id):
 
 
 if __name__ == "__main__":
-    commit_sha = "c7692b8a98cb9c6b7f5048e36b6cabfd03b3433d"
-    neo4j_anaylsis_id = "2929622178614665216"
-    grakn_analysis_id = "5027489464949336064"
-    neo4j_overviews = reformat_iterations_in_overviews(get_trace_overviews(get_json(get_json_url(commit_sha, neo4j_anaylsis_id))))
-    grakn_overviews = reformat_iterations_in_overviews(get_trace_overviews(get_json(get_json_url(commit_sha, grakn_analysis_id))))
+    old_commit_sha = "6a2761ee3efa2dfed9b62e3d90a5bb53e69f873c"
+    grakn_commit_sha = "37f03c58fe328bc91496931d5171b970533d8ae8"
+
+    # old_grakn_anaylsis_id = "7285331274130199552"
+    old_anaylsis_id = "5452798450816204800"
+    grakn_analysis_id = "2070020319353041920"
+    # grakn_optimised_analysis_id = "695813266528300032"
+    old_overviews = reformat_iterations_in_overviews(get_trace_overviews(get_json(get_json_url(old_commit_sha, old_anaylsis_id))))
+    grakn_overviews = reformat_iterations_in_overviews(get_trace_overviews(get_json(get_json_url(grakn_commit_sha, grakn_analysis_id))))
 
     grakn_color = [113/256, 87/256, 202/256]
-    neo4j_color = [24/256, 127/256, 183/256]
+    old_color = [24/256, 127/256, 183/256]
     bar_edgecolor = "#000"
 
-    agents = list(set(grakn_overviews.keys()).intersection(set(neo4j_overviews.keys())))
+    agents = list(set(grakn_overviews.keys()).intersection(set(old_overviews.keys())))
     agents.remove("closeClient")
     agents.remove("closeSession")
     agents.remove("openSession")
 
     x = np.arange(len(agents))  # the label locations
-    width = 0.2  # the width of the bars
+    width = 0.3  # the width of the bars
     capsize = 3  # width of the errorbar caps
 
     image_extension = "png"
 
     # Overview charts
     overview_iterations_to_plot = [4, 8, 12]
-    overview_chart(overview_iterations_to_plot, agents, x, width, capsize, bar_edgecolor, grakn_overviews, neo4j_overviews, grakn_color, neo4j_color, image_extension)
+    overview_chart(overview_iterations_to_plot, agents, x, width, capsize, bar_edgecolor, grakn_overviews, old_overviews, grakn_color, old_color, image_extension)
 
     # Line charts
     for agent in agents:
-        line_chart(agent, grakn_overviews, neo4j_overviews, grakn_color, neo4j_color, capsize, image_extension)
+        line_chart(agent, grakn_overviews, old_overviews, grakn_color, old_color, capsize, image_extension)

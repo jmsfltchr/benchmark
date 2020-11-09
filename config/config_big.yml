@@ -7,19 +7,19 @@ agents:
   - name: "ageUpdate"
     mode: TRACE
   - name: "parentship"
-    mode: RUN
+    mode: TRACE
   - name: "relocation"
-    mode: RUN
+    mode: TRACE
   - name: "company"
-    mode: RUN
+    mode: TRACE
   - name: "employment"
-    mode: RUN
+    mode: TRACE
   - name: "product"
-    mode: RUN
+    mode: TRACE
   - name: "transaction"
-    mode: RUN
+    mode: TRACE
   - name: "friendship"
-    mode: RUN
+    mode: TRACE
   - name: "meanWage"
     mode: TRACE
   - name: "findLivedIn"

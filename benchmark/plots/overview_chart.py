@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from matplotlib.pyplot import tight_layout
 
 
-def overview_chart(iterations, labels, x, width, capsize, bar_edgecolor, grakn_overviews, neo4j_overviews, grakn_color, neo4j_color, image_extension):
+def overview_chart(iterations, labels, x, width, capsize, bar_edgecolor, grakn_overviews, old_overviews, grakn_color, old_color, image_extension):
 
     fig, axs = plt.subplots(len(iterations), 1, sharex=True, figsize=(20, 10))
     first = True
@@ -12,22 +12,22 @@ def overview_chart(iterations, labels, x, width, capsize, bar_edgecolor, grakn_o
     SMALL_SIZE = 14
     MEDIUM_SIZE = 18
 
-    neo4j_overviews = sort_overviews(neo4j_overviews)
+    old_overviews = sort_overviews(old_overviews)
     grakn_overviews = sort_overviews(grakn_overviews)
 
     for iteration, ax in zip(iterations, axs):
-        neo4j_average = unwrap_overviews(neo4j_overviews, "average", labels, iteration)
-        neo4j_error = unwrap_overviews(neo4j_overviews, "standard-deviation", labels, iteration)
+        old_average = unwrap_overviews(old_overviews, "average", labels, iteration)
+        old_error = unwrap_overviews(old_overviews, "standard-deviation", labels, iteration)
         grakn_average = unwrap_overviews(grakn_overviews, "average", labels, iteration)
         grakn_error = unwrap_overviews(grakn_overviews, "standard-deviation", labels, iteration)
 
         bars1 = ax.bar(x - width / 2,
-                       neo4j_average,
+                       old_average,
                        width,
-                       yerr=neo4j_error,
+                       yerr=old_error,
                        capsize=capsize,
-                       label='Neo4j',
-                       color=neo4j_color,
+                       label='Old',
+                       color=old_color,
                        edgecolor=bar_edgecolor)
 
         bars2 = ax.bar(x + width / 2,

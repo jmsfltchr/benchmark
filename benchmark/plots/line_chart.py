@@ -1,18 +1,18 @@
 from matplotlib import pyplot as plt
 
 
-def line_chart(agent_name, grakn_overviews, neo4j_overviews, grakn_color, neo4j_color, capsize, image_extension):
+def line_chart(agent_name, grakn_overviews, old_overviews, grakn_color, old_color, capsize, image_extension):
 
     iterations = list(int(iteration) for iteration in grakn_overviews.get(agent_name)['average'].keys())
 
     grakn_averages = unwrap_overviews_for_lines(agent_name, grakn_overviews, "average")
     grakn_error = unwrap_overviews_for_lines(agent_name, grakn_overviews, "standard-deviation")
-    neo4j_averages = unwrap_overviews_for_lines(agent_name, neo4j_overviews, "average")
-    neo4j_error = unwrap_overviews_for_lines(agent_name, neo4j_overviews, "standard-deviation")
+    old_averages = unwrap_overviews_for_lines(agent_name, old_overviews, "average")
+    old_error = unwrap_overviews_for_lines(agent_name, old_overviews, "standard-deviation")
 
     fig = plt.figure()
     plt.errorbar(iterations, grakn_averages, yerr=grakn_error, label='Grakn', capsize=capsize, color=grakn_color, lolims=True)
-    plt.errorbar(iterations, neo4j_averages, yerr=neo4j_error, label='Neo4j', capsize=capsize, color=neo4j_color, lolims=True)
+    plt.errorbar(iterations, old_averages, yerr=old_error, label='Old', capsize=capsize, color=old_color, lolims=True)
 
     ax = fig.axes[0]
     ax.set_ylabel('Time (ms)')
