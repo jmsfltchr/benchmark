@@ -35,12 +35,39 @@ class Report {
     static LinkedHashMap<String, String> agentDescriptions() {
         LinkedHashMap<String, String> desc = [:]
 
-        desc."PersonBirth" = """
-Adds people to the world simulation. This involves adding a single entity with a large number of attributes attached.
-"""
-        desc."Employment" = """
-Finds existing people and makes them employees of companies.
-"""
+        desc."MarriageAgent" = """Retrieves a set of men and a set of women from a given city, who are not in a marriage 
+already. Creates random pairings between them, and creates a marriage relation between the pair. This marriage is 
+related to the city in which it took place by another relation."""
+
+        desc."PersonBirthAgent" = """Simulates people being born into the world simulation. This adds each person as an 
+entity, with attributes Email, Forename, Surname, Gender, Date of Birth and creates a relation from that person to their 
+place of birth."""
+        
+        desc."AgeUpdateAgent" = """Increments the Age attribute of all people in the simulation by 1 year."""
+        
+        desc."ParentshipAgent" = """Finds children born in a city and married couples who don't have children. 
+Distributes the children across the marriages, relating them together."""
+
+        desc."CompanyAgent" = """Inserts new companies with a name and number, relating them to the country in which 
+they are incorporated, also recording the date of incorporation."""
+
+        desc."ProductAgent" = """Inserts new products, each with a name, barcode and description. Relates each to its 
+continent of origin."""
+
+        desc."TransactionAgent" = """For a given country, finds finds companies incorporated there and products that are 
+produced in the country's continent. Creates transactions between random pairs of those companies, with one as the buyer, 
+one as the seller, and a product as the merchandise."""
+
+        desc."ArbitraryOneHopAgent" = """Matches for a given person and anything that is one relation away."""
+        
+        desc."TwoHopAgent" = """Find all of the parents of children who were born in London."""
+        
+        desc."FindSpecificMarriageAgent" = """Retrieve a specific marriage (a relation) by it's identifier (a key)."""
+        
+        desc."FindSpecificPersonAgent" = """Retrieve a specific person (an entity) by their email (a key)."""
+
+//        desc."Employment" = """Finds existing people and makes them employees of companies.""" // Not enabled yet
+
         return desc
     }
 
