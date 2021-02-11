@@ -50,23 +50,22 @@ public class MarriageAgent<DB_OPERATION extends DbOperation> extends CityAgent<D
             // Find bachelors and bachelorettes who are considered adults and who are not in a marriage and pair them off randomly
             LocalDateTime dobOfAdults = benchmarkContext.today().minusYears(benchmarkContext.world().AGE_OF_ADULTHOOD);
             List<String> womenEmails;
-            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing())) {
+            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing(), false)) {
                 womenEmails = runAction(actionFactory().unmarriedPeopleInCityAction(dbOperation, city, "female", dobOfAdults));
                 shuffle(womenEmails);
             }
 
             List<String> menEmails;
-            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing())) {
+            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing(), false)) {
                 menEmails = runAction(actionFactory().unmarriedPeopleInCityAction(dbOperation, city, "male", dobOfAdults));
                 shuffle(menEmails);
             }
 
             int numMarriagesPossible = Math.min(benchmarkContext.world().getScaleFactor(), Math.min(womenEmails.size(), menEmails.size()));
             if (iteration() >= 5) {
-                System.out.println("asdf");
                 assert true;
             }
-            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing())) {
+            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing(), true)) {
                 if (numMarriagesPossible > 0) {
                     for (int i = 0; i < numMarriagesPossible; i++) {
                         String wifeEmail = womenEmails.get(i);

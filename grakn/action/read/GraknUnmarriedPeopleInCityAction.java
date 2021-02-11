@@ -20,7 +20,6 @@ package grakn.benchmark.grakn.action.read;
 import grakn.benchmark.common.action.read.UnmarriedPeopleInCityAction;
 import grakn.benchmark.common.world.World;
 import grakn.benchmark.grakn.driver.GraknOperation;
-import graql.lang.Graql;
 import graql.lang.pattern.variable.UnboundVariable;
 import graql.lang.query.GraqlMatch;
 
@@ -30,7 +29,7 @@ import java.util.List;
 import static grakn.benchmark.grakn.action.Model.CITY;
 import static grakn.benchmark.grakn.action.Model.DATE_OF_BIRTH;
 import static grakn.benchmark.grakn.action.Model.EMAIL;
-import static grakn.benchmark.grakn.action.Model.END_DATE;
+import static grakn.benchmark.grakn.action.Model.RESIDENCY_END_DATE;
 import static grakn.benchmark.grakn.action.Model.GENDER;
 import static grakn.benchmark.grakn.action.Model.LOCATION_NAME;
 import static grakn.benchmark.grakn.action.Model.MARRIAGE;
@@ -67,13 +66,15 @@ public class GraknUnmarriedPeopleInCityAction extends UnmarriedPeopleInCityActio
     public static GraqlMatch query(String marriageRole, String gender, LocalDateTime dobOfAdults, String cityName) {
         UnboundVariable personVar = var(PERSON);
         UnboundVariable cityVar = var(CITY);
-        return match(
-                personVar.isa(PERSON).has(GENDER, gender).has(EMAIL, var(EMAIL)).has(DATE_OF_BIRTH, var(DATE_OF_BIRTH)),
-                var(DATE_OF_BIRTH).lte(dobOfAdults),
-                not(var("m").rel(marriageRole, personVar).isa(MARRIAGE)),
-                var("r").rel(RESIDENCY_RESIDENT, personVar).rel(RESIDENCY_LOCATION, cityVar).isa(RESIDENCY),
-                not(var("r").has(END_DATE, var(END_DATE))),
-                cityVar.isa(CITY).has(LOCATION_NAME, cityName)
-        ).get(EMAIL);
+        GraqlMatch.Unfiltered match = match(personVar.isa(PERSON).has(GENDER, gender).has(EMAIL, var(EMAIL)).has(DATE_OF_BIRTH, var(DATE_OF_BIRTH)),
+                                            var(DATE_OF_BIRTH).lte(dobOfAdults),
+                                            var("r").rel(RESIDENCY_RESIDENT, personVar).rel(RESIDENCY_LOCATION, cityVar).isa(RESIDENCY),
+                                            cityVar.isa(CITY).has(LOCATION_NAME, cityName),
+                                            not(var("m").rel(marriageRole, personVar).isa(MARRIAGE)),
+                                            not(var("r").has(RESIDENCY_END_DATE, var(RESIDENCY_END_DATE))));
+//        System.out.println("\nmatch in UnmarriedPeople:" + match);
+        return match
+                 // TODO this is missing
+        .get(EMAIL);
     }
 }

@@ -31,15 +31,29 @@ date-of-event sub attribute,
 
 date-of-incorporation sub date-of-event;
 
-start-date sub date-of-event;
+start-date sub date-of-event, abstract;
 
-end-date sub date-of-event;
+end-date sub date-of-event, abstract;
 
-date-of-birth sub date-of-event;
+residency-end-date sub end-date, # TODO this type exists as a patch to pass rule validation
+  abstract;
+
+residency-start-date sub start-date, # TODO this type exists as a patch to pass rule validation
+  abstract;
+
+employment-start-date sub residency-start-date;
+
+employment-end-date sub residency-end-date;
+
+date-of-birth sub residency-start-date;
 
 date-of-marriage sub date-of-event;  # TODO unused
 
-relocation-date sub date-of-event;
+relocation-date sub residency-end-date;
+
+friendship-start-date sub start-date;
+
+friendship-end-date sub end-date;
 
 gender sub attribute,
     value string;
@@ -129,10 +143,10 @@ location sub entity,
     plays relocation:previous-location,
     plays relocation:new-location,
     plays locates:location,
-    plays born-in:place-of-birth;  # TODO Can we avoid using this but also avoid validation errors?
+    plays born-in:place-of-birth,
+    plays residency:location;  # TODO Can we avoid using this but also avoid validation errors?
 
-city sub location,
-    plays residency:location;
+city sub location;
 
 country sub location,
     owns currency,
@@ -174,14 +188,15 @@ when {
 # Currency
 # --------------------------------------------------------
 
-rule transaction-currency-is-that-of-the-country:
-when {
-    $transaction isa transaction;
-    $l(located: $transaction, location: $transaction-location) isa locates;
-    $transaction-location isa country, has currency $currency;
-} then {
-    $transaction has $currency;
-};
+# TODO: uncomment once reasoning is enabled
+#rule transaction-currency-is-that-of-the-country:
+#when {
+#    $transaction isa transaction;
+#    $l(located: $transaction, location: $transaction-location) isa locates;
+#    $transaction-location isa country, has currency $currency;
+#} then {
+#    $transaction has $currency;
+#};
 
 # --------------------------------------------------------
 # Friends and Family
@@ -211,8 +226,8 @@ parentship sub relation,
     relates child;
 
 friendship sub relation,
-    owns start-date,
-    owns end-date,
+    owns friendship-start-date,
+    owns friendship-end-date,
     relates friend; # Could be N-ary, though in a real-world context this is imperfect
 
 marriage sub relation,
@@ -231,8 +246,10 @@ born-in sub locates,
     relates child as located;
 
 residency sub relation,
-    owns start-date,
-    owns end-date,
+#    owns start-date,
+#    owns end-date, # TODO put this back when patch is resolved
+    owns relocation-date, # TODO this is a patch to pass rule validation
+    owns date-of-birth, # TODO this is a patch to pass rule validation
     owns is-current,
     relates resident,
     relates location;
@@ -248,40 +265,43 @@ relocation sub relation,
 # - move to a location
 # - can be inferred from where someone works or studies at school or university
 # TODO: uncomment once reasoning is enabled
-#rule born-in-location-implies-residency:
-#when {
-#    $bi(place-of-birth: $location, child: $person) isa born-in;
-#} then {
-#    (resident: $person, location: $location) isa residency;
-#};
+rule born-in-location-implies-residency:
+when {
+    $bi(place-of-birth: $location, child: $person) isa born-in;
+} then {
+    (resident: $person, location: $location) isa residency;
+};
 
 # TODO: uncomment once reasoning is enabled
+# TODO: needs work as copying attribute values by rule is disallowed in Grakn 2.0, have patched it for now
 # This rule can be triggered by a person moving back to their hometown having moved away, and add an incorrect start-date
-#rule born-in-location-implies-residency-date:
-#when {
-#    $bi(place-of-birth: $location, child: $person) isa born-in;
-#    $person isa person, has date-of-birth $dob;
-#    $r(resident: $person, location: $location) isa residency;
-#} then {
-#    $r has $dob;
-#};
+rule born-in-location-implies-residency-date:
+when {
+    $bi(place-of-birth: $location, child: $person) isa born-in;
+    $person isa person, has date-of-birth $dob;
+    $r(resident: $person, location: $location) isa residency;
+} then {
+    $r has $dob;
+};
 
 # TODO: uncomment once reasoning is enabled
-#rule person-relocating-adds-new-residency:
-#when {
-#    $rel(relocated-person: $person, new-location: $location) isa relocation;
-#} then {
-#    (resident: $person, location: $location) isa residency;
-#};
+# TODO: needs work as copying attribute values by rule is disallowed in Grakn 2.0, have patched it for now
+rule person-relocating-adds-new-residency:
+when {
+    $rel(relocated-person: $person, new-location: $location) isa relocation;
+} then {
+    (resident: $person, location: $location) isa residency;
+};
 
 # TODO: uncomment once reasoning is enabled
-#rule person-relocating-ends-old-residency:
-#when {
-#    $rel(relocated-person: $person, previous-location: $location) isa relocation, has relocation-date $rel-date;
-#    $old-residency(resident: $person, location: $location) isa residency;
-#} then {
-#    $old-residency has $rel-date;
-#};
+# TODO: '{$location=location, $rel-date=relocation-date, $rel=relocation, $person=person, $old-residency=residency}'
+rule person-relocating-ends-old-residency:
+when {
+    $rel(relocated-person: $person, previous-location: $location) isa relocation, has relocation-date $rel-date;
+    $old-residency(resident: $person, location: $location) isa residency;
+} then {
+    $old-residency has $rel-date;
+};
 
 # TODO: uncomment once reasoning is enabled
 #rule residency-without-end-date-is-current:
@@ -294,12 +314,13 @@ relocation sub relation,
 #    $res has is-current true;
 #};
 
-rule label-non-current-residency:
-when {
-    $res isa residency, has end-date $end-date;
-} then {
-    $res has is-current false;
-};
+# TODO: uncomment once reasoning is enabled
+#rule label-non-current-residency:
+#when {
+#    $res isa residency, has end-date $end-date;
+#} then {
+#    $res has is-current false;
+#};
 
 # --------------------------------------------------------
 # Organisational Structure
@@ -333,7 +354,7 @@ incorporation sub relation,
 #    plays volunteering:cause,
 #    plays transaction:buyer;
 
-membership sub relation,
+membership sub relation, abstract,
 #    owns identifier @key,
     owns start-date,
     owns end-date,
@@ -354,6 +375,8 @@ employment sub membership,
     # The attribute on an implicit relation is a pattern we would like to stress-test
 
     owns contracted-hours,
+    owns employment-start-date as start-date,
+    owns employment-end-date as end-date,
     # Nested relation
     plays locates:located;
 
@@ -378,9 +401,9 @@ legal-document sub entity, abstract,
     owns date-signed,  # TODO unused
     owns text-content;
 
-employment-contract sub legal-document, abstract,
-    # plays employment:contract,
-    owns contract-content,
+employment-contract sub legal-document,
+    plays employment:contract,
+    owns contract-content as text-content,
     owns contracted-hours;
 
 # --------------------------------------------------------
@@ -422,9 +445,6 @@ employment sub membership,
 #occupation sub entity,
 #   plays employment_profession;
 
-employment-contract sub legal-document,
-    plays employment:contract;
-
 wage sub entity,
     plays employment:wage;
 
@@ -443,10 +463,11 @@ wage sub entity,
 #    $content has content-language $lang1;
 #};
 
-rule contracted-hours-apply-to-employment:
-when {
-    $emp(contract: $c) isa employment;
-    $c isa employment-contract, has contracted-hours $hours;
-} then {
-    $emp has $hours;
-};
+# TODO: uncomment once reasoning is enabled
+#rule contracted-hours-apply-to-employment:
+#when {
+#    $emp(contract: $c) isa employment;
+#    $c isa employment-contract, has contracted-hours $hours;
+#} then {
+#    $emp has $hours;
+#};

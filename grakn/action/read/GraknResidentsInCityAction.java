@@ -20,7 +20,6 @@ package grakn.benchmark.grakn.action.read;
 import grakn.benchmark.common.action.read.ResidentsInCityAction;
 import grakn.benchmark.common.world.World;
 import grakn.benchmark.grakn.driver.GraknOperation;
-import graql.lang.Graql;
 import graql.lang.pattern.variable.UnboundVariable;
 import graql.lang.query.GraqlMatch;
 
@@ -29,13 +28,13 @@ import java.util.List;
 
 import static grakn.benchmark.grakn.action.Model.CITY;
 import static grakn.benchmark.grakn.action.Model.EMAIL;
-import static grakn.benchmark.grakn.action.Model.END_DATE;
+import static grakn.benchmark.grakn.action.Model.RESIDENCY_END_DATE;
 import static grakn.benchmark.grakn.action.Model.LOCATION_NAME;
 import static grakn.benchmark.grakn.action.Model.PERSON;
 import static grakn.benchmark.grakn.action.Model.RESIDENCY;
 import static grakn.benchmark.grakn.action.Model.RESIDENCY_LOCATION;
 import static grakn.benchmark.grakn.action.Model.RESIDENCY_RESIDENT;
-import static grakn.benchmark.grakn.action.Model.START_DATE;
+import static grakn.benchmark.grakn.action.Model.RESIDENCY_START_DATE;
 import static graql.lang.Graql.match;
 import static graql.lang.Graql.not;
 import static graql.lang.Graql.var;
@@ -55,8 +54,8 @@ public class GraknResidentsInCityAction extends ResidentsInCityAction<GraknOpera
         UnboundVariable person = var(PERSON);
         UnboundVariable cityVar = var(CITY);
         UnboundVariable residency = var("r");
-        UnboundVariable startDate = var(START_DATE);
-        UnboundVariable endDate = var(END_DATE);
+        UnboundVariable startDate = var(RESIDENCY_START_DATE);
+        UnboundVariable endDate = var(RESIDENCY_END_DATE);
         return match(
                 person.isa(PERSON)
                         .has(EMAIL, var(EMAIL)),
@@ -66,10 +65,10 @@ public class GraknResidentsInCityAction extends ResidentsInCityAction<GraknOpera
                         .rel(RESIDENCY_RESIDENT, PERSON)
                         .rel(RESIDENCY_LOCATION, CITY)
                         .isa(RESIDENCY)
-                        .has(START_DATE, startDate),
+                        .has(RESIDENCY_START_DATE, startDate),
                 not(
                         residency
-                                .has(END_DATE, endDate)
+                                .has(RESIDENCY_END_DATE, endDate)
                 ),
                 startDate.lte(earliestDate)
         );

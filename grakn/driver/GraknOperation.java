@@ -40,9 +40,10 @@ public class GraknOperation extends TransactionalDbOperation {
 
     boolean closed = false;
 
-    public GraknOperation(GraknClient.Session session, LogWrapper log, String tracker, long iteration, boolean trace) {
+    public GraknOperation(GraknClient.Session session, LogWrapper log, String tracker, long iteration, boolean trace, boolean isWrite) {
         super(tracker, iteration, trace);
-        this.transaction = session.transaction(GraknClient.Transaction.Type.WRITE);
+        if (isWrite) this.transaction = session.transaction(GraknClient.Transaction.Type.WRITE);
+        else this.transaction = session.transaction(GraknClient.Transaction.Type.READ);
         this.log = log;
     }
 

@@ -61,21 +61,16 @@ public class GraknInsertMarriageAction extends InsertMarriageAction<GraknOperati
         UnboundVariable city = var(CITY);
         UnboundVariable marriage = var("marriage");
 
-        ThingVariable.Attribute cityNameVar = var().eq(worldCityName);
-        ThingVariable.Attribute marriageIdentifierVar = var().eq(marriageIdentifier);
-        ThingVariable.Attribute husbandEmailVar = var().eq(husbandEmail);
-        ThingVariable.Attribute wifeEmailVar = var().eq(wifeEmail);
-
         return match(
-                husband.isa(PERSON).has(EMAIL, husbandEmailVar.toString()),
-                wife.isa(PERSON).has(EMAIL, wifeEmailVar.toString()),
-                city.isa(CITY).has(LOCATION_NAME, cityNameVar.toString())
+                husband.isa(PERSON).has(EMAIL, husbandEmail),
+                wife.isa(PERSON).has(EMAIL, wifeEmail),
+                city.isa(CITY).has(LOCATION_NAME, worldCityName)
         ).insert(
                 marriage
                         .rel(MARRIAGE_HUSBAND, husband)
                         .rel(MARRIAGE_WIFE, wife)
                         .isa(MARRIAGE)
-                        .has(MARRIAGE_ID, marriageIdentifierVar.toString()),
+                        .has(MARRIAGE_ID, marriageIdentifier),
                 var().rel(LOCATES_LOCATED, marriage).rel(LOCATES_LOCATION, city).isa(LOCATES)
         );
     }

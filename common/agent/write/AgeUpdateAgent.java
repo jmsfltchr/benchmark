@@ -45,7 +45,7 @@ public class AgeUpdateAgent<DB_OPERATION extends DbOperation> extends CityAgent<
 
         @Override
         protected void run(DbOperationFactory<DB_OPERATION> dbOperationFactory, World.City city) {
-            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing())) {
+            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing(), true)) {
                 UpdateAgesOfPeopleInCityAction<DB_OPERATION> updateAgesOfAllPeopleInCityAction = actionFactory().updateAgesOfPeopleInCityAction(dbOperation, benchmarkContext.today(), city);
                 runAction(updateAgesOfAllPeopleInCityAction);
                 dbOperation.save();

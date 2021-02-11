@@ -92,26 +92,26 @@ public class GraknDriver extends TransactionalDbDriver<GraknClient.Transaction, 
 
     @Override
     public void printStatistics(Logger LOG) {
-        GraknClient.Session session = session("statisticsDataSession");
+        GraknClient.Session session = session("world");
         GraknClient.Transaction tx = session.transaction(GraknClient.Transaction.Type.READ);
         DecimalFormat formatter = new DecimalFormat("#,###");
 
         long numberOfEntities = tx.query().match(match(var("x").isa("entity")).count()).get().asLong();
-        long numberOfAttributes = tx.query().match(match(var("x").isa("attribute")).count()).get().asLong();
-        long numberOfRelations = tx.query().match(match(var("x").isa("relation")).count()).get().asLong();
-        long numberOfThings = tx.query().match(match(var("x").isa("thing")).count()).get().asLong();
+//        long numberOfAttributes = tx.query().match(match(var("x").isa("attribute")).count()).get().asLong();
+//        long numberOfRelations = tx.query().match(match(var("x").isa("relation")).count()).get().asLong();
+//        long numberOfThings = tx.query().match(match(var("x").isa("thing")).count()).get().asLong();
 
         LOG.info("");
         LOG.info("Benchmark statistic:");
         LOG.info("");
         LOG.info("Count 'entity': {}", formatter.format(numberOfEntities));
-        LOG.info("Count 'relation': {}", formatter.format(numberOfRelations));
-        LOG.info("Count 'attribute': {}", formatter.format(numberOfAttributes));
-        if (numberOfThings != numberOfEntities + numberOfAttributes + numberOfRelations) {
-            LOG.error("The sum of 'entity', 'relation', and 'attribute' counts do not match the total 'thing' count: {}", formatter.format(numberOfThings));
-        } else {
-            LOG.info("Count 'thing' (total): {}", formatter.format(numberOfThings));
-        }
+//        LOG.info("Count 'relation': {}", formatter.format(numberOfRelations));
+//        LOG.info("Count 'attribute': {}", formatter.format(numberOfAttributes));
+//        if (numberOfThings != numberOfEntities + numberOfAttributes + numberOfRelations) {
+//            LOG.error("The sum of 'entity', 'relation', and 'attribute' counts do not match the total 'thing' count: {}", formatter.format(numberOfThings));
+//        } else {
+//            LOG.info("Count 'thing' (total): {}", formatter.format(numberOfThings));
+//        }
         LOG.info("");
     }
 

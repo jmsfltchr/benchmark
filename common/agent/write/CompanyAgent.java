@@ -47,7 +47,7 @@ public class CompanyAgent<DB_OPERATION extends DbOperation> extends CountryAgent
         protected void run(DbOperationFactory<DB_OPERATION> dbOperationFactory, World.Country country) {
             int numCompanies = benchmarkContext.world().getScaleFactor();
 
-            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing())) {
+            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing(), true)) {
 
                 for (int i = 0; i < numCompanies; i++) {
                     String adjective = pickOne(benchmarkContext.world().getAdjectives());

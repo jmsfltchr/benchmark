@@ -61,18 +61,18 @@ public class RelocationAgent<DB_OPERATION extends DbOperation> extends CityAgent
             List<String> residentEmails;
             List<String> relocationCityNames;
 
-            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing())) {
+            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing(), false)) {
                 ResidentsInCityAction<?> residentsInCityAction = actionFactory().residentsInCityAction(dbOperation, city, benchmarkContext.world().getScaleFactor(), earliestDateOfResidencyToRelocate);
                 residentEmails = runAction(residentsInCityAction);
             }
             shuffle(residentEmails);
 
-            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing())) {
+            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing(), false)) {
                 CitiesInContinentAction<?> citiesInContinentAction = actionFactory().citiesInContinentAction(dbOperation, city);
                 relocationCityNames = runAction(citiesInContinentAction);
             }
 
-            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing())) {
+            try (DB_OPERATION dbOperation = dbOperationFactory.newDbOperation(tracker(), iteration(), isTracing(), true)) {
                 Allocation.allocate(residentEmails, relocationCityNames, (residentEmail, relocationCityName) -> {
                     runAction(actionFactory().insertRelocationAction(dbOperation, city, benchmarkContext.today(), residentEmail, relocationCityName));
                 });

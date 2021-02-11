@@ -58,8 +58,8 @@ public class Model {
     public static final String RESIDENCY = "residency";
     public static final String RESIDENCY_LOCATION = "location";
     public static final String RESIDENCY_RESIDENT = "resident";
-    public static final String START_DATE = "start-date";
-    public static final String END_DATE = "end-date";
+    public static final String RESIDENCY_START_DATE = "residency-start-date";
+    public static final String RESIDENCY_END_DATE = "residency-end-date";
     public static final String IS_CURRENT = "is-current";
 
     public static final String LOCATION_HIERARCHY = "location-hierarchy";
@@ -75,6 +75,7 @@ public class Model {
     public static final String EMPLOYMENT_EMPLOYER = "employer";
     public static final String EMPLOYMENT_CONTRACT = "contract";
     public static final String EMPLOYMENT_WAGE = "wage";
+    public static final String EMPLOYMENT_START_DATE = "employment-start-date";
     public static final String CONTRACT_CONTENT = "contract-content";
     public static final String CONTRACTED_HOURS = "contracted-hours";
 
@@ -85,6 +86,8 @@ public class Model {
 
     public static final String FRIENDSHIP = "friendship";
     public static final String FRIENDSHIP_FRIEND = "friend";
+    public static final String FRIENDSHIP_START_DATE = "friendship-start-date";
+    public static final String FRIENDSHIP_END_DATE = "friendship-end-date";
 
     public static final String PARENTSHIP = "parentship";
     public static final String PARENTSHIP_PARENT = "parent";

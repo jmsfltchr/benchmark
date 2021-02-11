@@ -21,8 +21,6 @@ import grakn.benchmark.common.action.Action;
 import grakn.benchmark.common.action.write.InsertFriendshipAction;
 import grakn.benchmark.grakn.driver.GraknOperation;
 import grakn.client.concept.answer.ConceptMap;
-import graql.lang.Graql;
-import graql.lang.pattern.variable.ThingVariable;
 import graql.lang.pattern.variable.UnboundVariable;
 import graql.lang.query.GraqlInsert;
 
@@ -32,8 +30,9 @@ import java.util.HashMap;
 import static grakn.benchmark.grakn.action.Model.EMAIL;
 import static grakn.benchmark.grakn.action.Model.FRIENDSHIP;
 import static grakn.benchmark.grakn.action.Model.FRIENDSHIP_FRIEND;
+import static grakn.benchmark.grakn.action.Model.FRIENDSHIP_START_DATE;
 import static grakn.benchmark.grakn.action.Model.PERSON;
-import static grakn.benchmark.grakn.action.Model.START_DATE;
+import static grakn.benchmark.grakn.action.Model.RESIDENCY_START_DATE;
 import static graql.lang.Graql.match;
 import static graql.lang.Graql.not;
 import static graql.lang.Graql.var;
@@ -54,15 +53,11 @@ public class GraknInsertFriendshipAction extends InsertFriendshipAction<GraknOpe
         UnboundVariable person2 = var("p2");
         UnboundVariable friendship = var();
 
-        ThingVariable.Attribute friend1EmailVar = var().eq(friend1Email);
-        ThingVariable.Attribute friend2EmailVar = var().eq(friend2Email);
-        ThingVariable.Attribute startDate = var().eq(today);
-
         return match(
                 person1
-                        .isa(PERSON).has(EMAIL, friend1EmailVar.toString()),
+                        .isa(PERSON).has(EMAIL, friend1Email),
                 person2
-                        .isa(PERSON).has(EMAIL, friend2EmailVar.toString()),
+                        .isa(PERSON).has(EMAIL, friend2Email),
                 not(
                         friendship
                                 .rel(FRIENDSHIP_FRIEND, person1)
@@ -74,7 +69,7 @@ public class GraknInsertFriendshipAction extends InsertFriendshipAction<GraknOpe
                         .rel(FRIENDSHIP_FRIEND, person1)
                         .rel(FRIENDSHIP_FRIEND, person2)
                         .isa(FRIENDSHIP)
-                        .has(START_DATE, startDate.toString())
+                        .has(FRIENDSHIP_START_DATE, today)
         );
     }
 
@@ -84,7 +79,7 @@ public class GraknInsertFriendshipAction extends InsertFriendshipAction<GraknOpe
             {
                 put(InsertFriendshipActionField.FRIEND1_EMAIL, dbOperation.getOnlyAttributeOfThing(answer, "p1", EMAIL));
                 put(InsertFriendshipActionField.FRIEND2_EMAIL, dbOperation.getOnlyAttributeOfThing(answer, "p2", EMAIL));
-                put(InsertFriendshipActionField.START_DATE, dbOperation.getOnlyAttributeOfThing(answer, FRIENDSHIP, START_DATE));
+                put(InsertFriendshipActionField.START_DATE, dbOperation.getOnlyAttributeOfThing(answer, FRIENDSHIP, RESIDENCY_START_DATE));
             }
         };
 

@@ -41,6 +41,7 @@ import static grakn.benchmark.grakn.action.Model.EMPLOYMENT;
 import static grakn.benchmark.grakn.action.Model.EMPLOYMENT_CONTRACT;
 import static grakn.benchmark.grakn.action.Model.EMPLOYMENT_EMPLOYEE;
 import static grakn.benchmark.grakn.action.Model.EMPLOYMENT_EMPLOYER;
+import static grakn.benchmark.grakn.action.Model.EMPLOYMENT_START_DATE;
 import static grakn.benchmark.grakn.action.Model.EMPLOYMENT_WAGE;
 import static grakn.benchmark.grakn.action.Model.LOCATES;
 import static grakn.benchmark.grakn.action.Model.LOCATES_LOCATED;
@@ -48,7 +49,7 @@ import static grakn.benchmark.grakn.action.Model.LOCATES_LOCATION;
 import static grakn.benchmark.grakn.action.Model.LOCATION_HIERARCHY;
 import static grakn.benchmark.grakn.action.Model.LOCATION_NAME;
 import static grakn.benchmark.grakn.action.Model.PERSON;
-import static grakn.benchmark.grakn.action.Model.START_DATE;
+import static grakn.benchmark.grakn.action.Model.RESIDENCY_START_DATE;
 import static grakn.benchmark.grakn.action.Model.WAGE;
 import static grakn.benchmark.grakn.action.Model.WAGE_VALUE;
 import static graql.lang.Graql.match;
@@ -99,7 +100,7 @@ public class GraknInsertEmploymentAction extends InsertEmploymentAction<GraknOpe
                         .rel(EMPLOYMENT_CONTRACT, contract)
                         .rel(EMPLOYMENT_WAGE, wage)
                         .isa(EMPLOYMENT)
-                        .has(START_DATE, employmentDate),
+                        .has(EMPLOYMENT_START_DATE, employmentDate),
                 wage
                         .isa(WAGE)
                         .has(WAGE_VALUE, wageValue)
@@ -121,7 +122,7 @@ public class GraknInsertEmploymentAction extends InsertEmploymentAction<GraknOpe
             put(InsertEmploymentActionField.CITY_NAME, dbOperation.getOnlyAttributeOfThing(answer, CITY, LOCATION_NAME));
             put(InsertEmploymentActionField.PERSON_EMAIL, dbOperation.getOnlyAttributeOfThing(answer, PERSON, EMAIL));
             put(InsertEmploymentActionField.COMPANY_NUMBER, dbOperation.getOnlyAttributeOfThing(answer, COMPANY, COMPANY_NUMBER));
-            put(InsertEmploymentActionField.START_DATE, dbOperation.getOnlyAttributeOfThing(answer, EMPLOYMENT, START_DATE));
+            put(InsertEmploymentActionField.START_DATE, dbOperation.getOnlyAttributeOfThing(answer, EMPLOYMENT, RESIDENCY_START_DATE));
             put(InsertEmploymentActionField.WAGE, dbOperation.getOnlyAttributeOfThing(answer, WAGE, WAGE_VALUE));
             put(InsertEmploymentActionField.CURRENCY, dbOperation.getOnlyAttributeOfThing(answer, WAGE, CURRENCY));
             put(InsertEmploymentActionField.CONTRACT_CONTENT, dbOperation.getOnlyAttributeOfThing(answer, CONTRACT, CONTRACT_CONTENT));
