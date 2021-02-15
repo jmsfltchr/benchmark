@@ -71,6 +71,6 @@ public class GraknResidentsInCityAction extends ResidentsInCityAction<GraknOpera
                                 .has(RESIDENCY_END_DATE, endDate)
                 ),
                 startDate.lte(earliestDate)
-        ).limit(30);
+        ).limit(3);
     }
 }
