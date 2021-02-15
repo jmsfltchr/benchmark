@@ -50,7 +50,7 @@ public class GraknResidentsInCityAction extends ResidentsInCityAction<GraknOpera
         return dbOperation.sortedExecute(query(city.name(), earliestDate), EMAIL, numResidents);
     }
 
-    public static GraqlMatch.Unfiltered query(String cityName, LocalDateTime earliestDate) {
+    public static GraqlMatch query(String cityName, LocalDateTime earliestDate) {
         UnboundVariable person = var(PERSON);
         UnboundVariable cityVar = var(CITY);
         UnboundVariable residency = var("r");
@@ -71,6 +71,6 @@ public class GraknResidentsInCityAction extends ResidentsInCityAction<GraknOpera
                                 .has(RESIDENCY_END_DATE, endDate)
                 ),
                 startDate.lte(earliestDate)
-        );
+        ).limit(30);
     }
 }

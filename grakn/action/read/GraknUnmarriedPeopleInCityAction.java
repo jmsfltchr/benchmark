@@ -75,6 +75,6 @@ public class GraknUnmarriedPeopleInCityAction extends UnmarriedPeopleInCityActio
 //        System.out.println("\nmatch in UnmarriedPeople:" + match);
         return match
                  // TODO this is missing
-        .get(EMAIL);
+        .get(EMAIL).limit(30);
     }
 }
