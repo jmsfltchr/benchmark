@@ -66,10 +66,10 @@ public class GraknResidentsInCityAction extends ResidentsInCityAction<GraknOpera
                         .rel(RESIDENCY_LOCATION, CITY)
                         .isa(RESIDENCY)
                         .has(RESIDENCY_START_DATE, startDate),
-                not(
-                        residency
-                                .has(RESIDENCY_END_DATE, endDate)
-                ),
+//                not(
+//                        residency
+//                                .has(RESIDENCY_END_DATE, endDate)
+//                ),
                 startDate.lte(earliestDate)
         ).limit(3);
     }

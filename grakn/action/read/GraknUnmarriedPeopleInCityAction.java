@@ -69,9 +69,10 @@ public class GraknUnmarriedPeopleInCityAction extends UnmarriedPeopleInCityActio
         GraqlMatch.Unfiltered match = match(personVar.isa(PERSON).has(GENDER, gender).has(EMAIL, var(EMAIL)).has(DATE_OF_BIRTH, var(DATE_OF_BIRTH)),
                                             var(DATE_OF_BIRTH).lte(dobOfAdults),
                                             var("r").rel(RESIDENCY_RESIDENT, personVar).rel(RESIDENCY_LOCATION, cityVar).isa(RESIDENCY),
-                                            cityVar.isa(CITY).has(LOCATION_NAME, cityName),
-                                            not(var("m").rel(marriageRole, personVar).isa(MARRIAGE)),
-                                            not(var("r").has(RESIDENCY_END_DATE, var(RESIDENCY_END_DATE))));
+                                            cityVar.isa(CITY).has(LOCATION_NAME, cityName)
+//                                            not(var("m").rel(marriageRole, personVar).isa(MARRIAGE)),
+//                                            not(var("r").has(RESIDENCY_END_DATE, var(RESIDENCY_END_DATE)))
+        );
 //        System.out.println("\nmatch in UnmarriedPeople:" + match);
         return match
                  // TODO this is missing
