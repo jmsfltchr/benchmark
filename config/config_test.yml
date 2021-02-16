@@ -33,9 +33,9 @@ agents:
   - name: "twoHop"
     mode: TRACE # no, because of parentship
   - name: "threeHop"
-    mode: OFF # no because of employment
+    mode: TRACE # no because of employment
   - name: "fourHop"
-    mode: OFF # no because of employment
+    mode: TRACE # no because of employment
   - name: "findSpecificMarriage"
     mode: TRACE # no because of not
   - name: "findSpecificPerson"

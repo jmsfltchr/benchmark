@@ -72,7 +72,7 @@ public class BenchmarkRunner {
 
         String dbName = getOption(commandLine, "d").orElse("grakn");
         String hostUri = getOption(commandLine, "s").orElse(null);
-        String grablTracingUri = getOption(commandLine, "t").orElse("localhost:7979");
+        String grablTracingUri = getOption(commandLine, "t").orElse("localhost:1729");
         String grablTracingOrganisation = commandLine.getOptionValue("o");
         String grablTracingRepository = commandLine.getOptionValue("r");
         String grablTracingCommit = commandLine.getOptionValue("c");
