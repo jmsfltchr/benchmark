@@ -27,7 +27,7 @@ def graknlabs_grakn_core_artifacts():
         artifact_name = "grakn-core-server-{platform}-{version}.{ext}",
         tag_source = deployment["artifact.release"],
         commit_source = deployment["artifact.snapshot"],
-        commit = "32fb372f58f91d8d012a9ef51a22c036301c223b",
+        commit = "d0671dec1fc4810a808a203439a5b43420dad848",
     )
 
 def graknlabs_grakn_cluster_artifacts():
