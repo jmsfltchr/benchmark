@@ -30,7 +30,7 @@ public class SimulationContext {
 
     private final World world;
     private final boolean isTest;
-    private int iteration;
+    private volatile int iteration;
 
     private SimulationContext(World world, boolean isTest) {
         this.world = world;

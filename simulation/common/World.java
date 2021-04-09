@@ -33,6 +33,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Objects.hash;
+
 public class World implements Region {
 
     public final int AGE_OF_ADULTHOOD = 1;
@@ -189,6 +191,19 @@ public class World implements Region {
         public String group() {
             return this.name();
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Continent continent = (Continent) o;
+            return continentName.equals(continent.continentName);
+        }
+
+        @Override
+        public int hashCode() {
+            return hash(continentName);
+        }
     }
 
     public class Country implements Region {
@@ -229,6 +244,20 @@ public class World implements Region {
         public String tracker() {
             return Tracker.of(this.continent(), this);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Country country = (Country) o;
+            return countryName.equals(country.countryName) &&
+                    continent.equals(country.continent);
+        }
+
+        @Override
+        public int hashCode() {
+            return hash(countryName, continent);
+        }
     }
 
     public class City implements Region {
@@ -264,6 +293,20 @@ public class World implements Region {
         @Override
         public String group() {
             return this.country.continent.name();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            City city = (City) o;
+            return cityName.equals(city.cityName) &&
+                    country.equals(city.country);
+        }
+
+        @Override
+        public int hashCode() {
+            return hash(cityName, country);
         }
     }
 

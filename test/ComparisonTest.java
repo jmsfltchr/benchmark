@@ -25,8 +25,8 @@ import grakn.benchmark.simulation.agent.PurchaseAgent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static grakn.benchmark.test.BenchmarksForComparison.graknCore;
-import static grakn.benchmark.test.BenchmarksForComparison.neo4j;
+import static grakn.benchmark.test.ComparisonTestSuite.GRAKN_CORE;
+import static grakn.benchmark.test.ComparisonTestSuite.NEO4J;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(ComparisonTestSuite.class)
@@ -34,7 +34,7 @@ public class ComparisonTest {
 
     // TODO: raw usage of class
     private void compareReports(Class<? extends Agent> agentClass) {
-        assertEquals(graknCore.getReport(agentClass), neo4j.getReport(agentClass));
+        assertEquals(GRAKN_CORE.getReport(agentClass), NEO4J.getReport(agentClass));
     }
 
 //    @Test

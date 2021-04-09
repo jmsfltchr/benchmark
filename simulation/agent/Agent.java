@@ -27,15 +27,19 @@ import grakn.benchmark.simulation.driver.Transaction;
 import grakn.benchmark.simulation.common.RandomSource;
 import grakn.benchmark.simulation.common.Region;
 import grakn.benchmark.simulation.common.World;
+import grakn.common.collection.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static grabl.tracing.client.GrablTracingThreadStatic.contextOnThread;
 import static grabl.tracing.client.GrablTracingThreadStatic.traceOnThread;
@@ -84,10 +88,11 @@ public abstract class Agent<REGION extends Region, TX extends Transaction> {
 
     public Map<String, List<Action<?, ?>.Report>> iterate(RandomSource randomSrc) {
         ConcurrentMap<String, List<Action<?, ?>.Report>> reports = new ConcurrentHashMap<>();
-        List<REGION> regions = getRegions(context.world());
-        regions.parallelStream().forEach(region -> {
-            List<Action<?, ?>.Report> report = runWithMayTrace(region, randomSrc.next().get());
-            if (context.isTest()) reports.put(region.tracker(), report);
+        List<Pair<REGION, Random>> regionRandomPairs = getRegions(context.world()).stream()
+                .map(region -> new Pair<>(region, randomSrc.next().get())).collect(Collectors.toList());
+        regionRandomPairs.parallelStream().forEach(pair -> {
+            List<Action<?, ?>.Report> report = runWithMayTrace(pair.first(), pair.second());
+            if (context.isTest()) reports.put(pair.first().tracker(), report);
         });
         return reports;
     }
