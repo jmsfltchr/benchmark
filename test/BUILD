@@ -34,7 +34,6 @@ java_test(
         "ComparisonTest.java",
         "ComparisonTestRunner.java",
         "ComparisonTestSuite.java",
-        "BenchmarksForComparison.java",
     ],
     data = [
         "//simulation/data",
