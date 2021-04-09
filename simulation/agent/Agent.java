@@ -90,6 +90,9 @@ public abstract class Agent<REGION extends Region, TX extends Transaction> {
         ConcurrentMap<String, List<Action<?, ?>.Report>> reports = new ConcurrentHashMap<>();
         List<Pair<REGION, Random>> regionRandomPairs = getRegions(context.world()).stream()
                 .map(region -> new Pair<>(region, randomSrc.next().get())).collect(Collectors.toList());
+        // I wanted to directly feed to the parallel stream below using .parallel() here, but it makes the _whole_
+        // stream parallel, which brings the bug back. Therefore, I believe we are stuck creating a list and then
+        // streaming from that list, as we have here.
         regionRandomPairs.parallelStream().forEach(pair -> {
             List<Action<?, ?>.Report> report = runWithMayTrace(pair.first(), pair.second());
             if (context.isTest()) reports.put(pair.first().tracker(), report);
