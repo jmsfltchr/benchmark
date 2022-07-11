@@ -45,7 +45,7 @@ traceSampling:
 
 runParams:
   randomSeed: 1
-  iterations: 6
+  iterations: 10
   scaleFactor: 2
   databaseName: "simulation-reasoning"
 
